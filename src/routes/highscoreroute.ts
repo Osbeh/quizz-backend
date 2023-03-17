@@ -1,5 +1,5 @@
 import express from 'express'
-import { collection } from '../models/highscore.js'
+// import { collection } from '../models/highscore.js'
 import Score from '../models/highscore.js'
 
 const router = express.Router()
@@ -29,6 +29,19 @@ router.post('/highscores', async(req,res) => {
     try {
         const newScore = await highscore.save()
         res.status(201).json(newScore)
+    } catch(err) {
+        res.status(400).json({message: err.message})
+    }
+})
+
+router.delete('/highscores', async(req,res) => {
+    const toBeDeleted = {
+        // name: req.body.name || "",
+        score: req.body.score
+    }
+    try {
+        const deleteRes = await Score.deleteMany(toBeDeleted)
+        res.status(200).json(deleteRes)
     } catch(err) {
         res.status(400).json({message: err.message})
     }
